@@ -4,14 +4,14 @@ import homeStyle from "./homeComponents/homeStyle.css";
 //components
 import NavBar from "./homeComponents/NavBar";
 import FileInput from "./homeComponents/FileInput";
-import FileList from "./homeComponents/FIleList";
+import FileList from "./homeComponents/FileList";
 
 export const HomePage = ({userName, jwt, setIsLogged}) => {
 
     const [searchedFile, setSearchedFile] = useState("");
     const [input, setInput] = useState(null);
-    const [fileList, setFileList] = useState(null);
-
+    const [fileList, setFileList] = useState([]);
+    
     // handlers
     const handleLogOut = () => {
         setIsLogged(false);
@@ -23,8 +23,16 @@ export const HomePage = ({userName, jwt, setIsLogged}) => {
     return (
         <div className="Homepage">
             <NavBar userName={userName} handleLogOut={handleLogOut}/>
-            <FileInput input={input} setInput={setInput}/>
-            <FileList listaFile={fileList}/>
+
+            <FileInput input={input} setInput={setInput} 
+            fileList={fileList} setFileList={setFileList}
+            jwt={jwt} userName={userName}
+            />
+
+            <FileList userName={userName} input={input} 
+            fileList={fileList} setFileList={setFileList}
+            jwt={jwt}
+            />
         </div>
     );
 };

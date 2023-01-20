@@ -10,7 +10,10 @@ const userSchema = new mongoose.Schema({
         require: true
     },
     files:{
-        type: [String, [String]], // a user can have single files or folders
+        type: [{
+            name: String,
+            size: Number
+        }],
         require: true,
         default: []
     },
