@@ -1,0 +1,54 @@
+.AuthBlock {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-direction: column;  
+    width: 450px; 
+    height: 500px;
+    padding: 20px;
+    margin: 20px auto; 
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #ccc;
+}
+
+.LogIn {
+    color: blue;
+    position: relative;
+}
+
+.NewUser {
+    color: orange;
+}
+
+.UserNameLabel{
+    position: relative;
+    right: 165px;
+    height: 5px;
+}
+
+.PasswordLabel{
+    position: relative;
+    right: 165px;
+    height: 5px;
+}
+
+.form-control{
+    position: relative;
+    margin: 8px;
+}
+
+.btn-primary{
+    position: relative;
+    margin: 10px;
+    padding: 10px;
+    width: 400px;
+    box-shadow: 2px 2px 5px #ccc;
+    border-radius: 10px;
+}
+
+.Error{
+    color: red;
+}
+
