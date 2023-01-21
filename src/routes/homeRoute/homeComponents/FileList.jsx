@@ -56,9 +56,6 @@ const FileList = ({userName, fileList, input, setFileList, jwt}) =>{
         .catch((err) => console.log(err));
     };
 
-    // downloads from a file received by a link
-    {/* to do */}
-
     return (
         <div className="FileList">
             <table class="table">

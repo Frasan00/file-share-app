@@ -77,8 +77,3 @@ export const del  = async (req: Request, res: Response)=> {
     console.log("File eliminated");
     return res.status(200).send(newFileArray);
 };
-
-// downloads for files received by a link from another user
-export const downloadFromLink  = async (req: Request, res: Response)=> {
-
-};
