@@ -8,7 +8,7 @@ In order to run this application you can:
 - You have to run Mongodb on mongodb://localhost:27017/file-share
 - You also have to install all dependencies and set a .env file with PORT, MONGO_URI, JWT_KEY 
 
-2) 
-- If you have docker you can use the run.sh to build and run this project automatically (source: docker compose)
-- This start the server and mongoDB that are linked together
-- Once up you just have to go on localhost:3000
+2) Use Docker
+- If you have docker installed you can use the command "bash run.sh" on linux to build and run this project automatically (source: docker compose)
+- This process starts server and mongoDB that will be linked together
+- Once docker compose has finished you just have to go on "http://localhost:3000" and you will be direcly connencted to the authentication page (or homepage if already logged in)
