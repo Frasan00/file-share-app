@@ -3,7 +3,6 @@ import axios from "axios";
 
 const FileList = ({userName, fileList, input, setFileList, jwt}) =>{
 
-
     useEffect(() => {
         const config = {
             headers: {
@@ -15,8 +14,50 @@ const FileList = ({userName, fileList, input, setFileList, jwt}) =>{
             let newArray = res.data;
             setFileList(newArray);
         })
-        .catch((err) => console.err(err));
-    }, [])
+        .catch((err) => console.log(err));
+    }, [input])
+
+    // handlers
+    const handleDelete = (fileName) => {
+        const config = {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+        };
+        axios.delete('http://localhost:5000/file/del/'+fileName+"/"+userName, config)
+        .then((res) => { setFileList(res.data); })
+        .catch((err) => console.log(err));
+    };
+
+    // downloads files from a file that we own
+    const handleDownload = (fileName) => { 
+        // since handleDownload it's a stream of data, a request with the auth token is made first to make sure we have the auth, and if it's succesful, the file is downloaded
+        const config = {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+        };
+        axios.get('http://localhost:5000/file/'+userName, config)
+        .then((res) => {
+            download(fileName);
+        })
+        .catch((err) => console.log(err));
+    };
+    const download = (fileName) => {
+        axios.get('http://localhost:5000/file/download/'+fileName+"/"+userName)
+        .then((res) => {
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName);
+            document.body.appendChild(link);
+            link.click();
+        })
+        .catch((err) => console.log(err));
+    };
+
+    // downloads from a file received by a link
+    {/* to do */}
 
     return (
         <div className="FileList">
@@ -25,7 +66,7 @@ const FileList = ({userName, fileList, input, setFileList, jwt}) =>{
                 <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Size</th>
-                <th scope="col">Uploaded</th>
+                <th scope="col">Uploaded on</th>
                 <th scope="col">Link</th>
                 </tr>
             </thead>
@@ -35,15 +76,18 @@ const FileList = ({userName, fileList, input, setFileList, jwt}) =>{
                     return (
                         <tr>
                         <th scope="row">{file.name}</th>
-                        <td>{file.size}</td>
-                        <td>to do date</td>
-                        <td>to do link</td>
+                        <td>{file.size < 1048576 ? (file.size/1024).toFixed(3)+" Kb": (file.size/1048576).toFixed(2)+ "Mb"}</td>
+                        <td>{file.date}</td>
+                        <td>
+                        <button type="button" id="Download" onClick={() => handleDownload(file.name)}>{file.link[0]}</button>  
+                        <button type="button" id="Trash" onClick={() => handleDelete(file.name)}>Delete</button>
+                        </td>
                         <td></td>
                         </tr>
                     )
                 })
                 :
-                <h4>Your files will be diplayed here</h4>
+                <p>No files were found </p>
                 }
             </tbody>
             </table>

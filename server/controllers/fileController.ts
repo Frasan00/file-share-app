@@ -5,23 +5,24 @@ import { Request, Response } from "express";
 
 export const getFiles = async (req: Request, res: Response)=> {
     const userName = req.params.userName;
-    const user = await User.findOne({userName: userName});
+    const user = await findUser(userName);
     res.status(200).send(user?.files);
     console.log("Files sent");
 };
 
+
+// download for files deteined by the user
 export const download = async (req: Request, res: Response)=> {
     const {userName, fileName} = req.params;
-    const user = await User.findOne({userName: userName});
+    const user = await findUser(userName);
     if(!user) return res.status(400).send("Couldn't find the user");
-    const fileToBeDownloaded = user.files.find((file) => file.name === fileName)
-    if (!fileToBeDownloaded) return res.status(404).send("File not found");
+    const file = user.files.find((file) => file.name === fileName)
+    if (!file) return res.status(404).send("File not found");
 
     res.setHeader("Content-Type", "application/octet-stream");
-    res.setHeader("Content-Disposition", "attachment; filename="+fileToBeDownloaded);
 
     // Pipe the file to the response
-    const readStream = fs.createReadStream("uploads/"+fileToBeDownloaded);
+    const readStream = fs.createReadStream('./uploads/'+userName+"/"+file.name);
     readStream.pipe(res);
 }; 
 
@@ -35,12 +36,19 @@ export const upload = async (req: Request, res: Response)=> {
     if(!user) return res.status(400).send("Couldn't find the user");
 
     // upload 
-    const writeStream = fs.createWriteStream('./uploads/'+fileName);
+    const writeStream = fs.createWriteStream('./uploads/'+userName+"/"+fileName);
     req.pipe(writeStream);
 
     // saves on db the updates
-    const newFileArray = [...user.files, {fileName, size}];
-    const newOccupated = user.occupatedMemory
+    const newFile = {
+        name: fileName || "",
+        size: size || 0,
+        date: new Date().toLocaleString().toString() || "",
+        link: ["Download!", './uploads/'+userName+"/"+fileName] || ""
+    };
+    const newFileArray = user.files;
+    newFileArray.push(newFile);
+    const newOccupated = user.occupatedMemory+size
     user.occupatedMemory = newOccupated;
     user.files = newFileArray;
     await user.save();
@@ -54,18 +62,23 @@ export const del  = async (req: Request, res: Response)=> {
     const user = await findUser(userName);
     if(!user) return res.status(400).send("Couldn't find the user");
     let sizeToRemove = 0;
-    const newFileArray = user.files.filter((file) => {
-        file.name !== fileName
-        if(file.name === fileName && file.size) sizeToRemove+=file.size;
-    });
+    // to do better: file size
+    user.files.map(file => file.name === fileName && file.size ? sizeToRemove+=file.size: null)
+
+    const newFileArray = user.files.filter(file => file.name !== fileName);
     sizeToRemove = user.occupatedMemory-sizeToRemove;
     user.occupatedMemory = sizeToRemove;
     user.files = newFileArray;
     await user.save();
-    fs.unlink("uploads/"+fileName, (err) => {
+    fs.unlink('./uploads/'+userName+"/"+fileName, (err) => {
         if (err) {
           throw err;
-        }});
+    }});
     console.log("File eliminated");
-    return res.status(200).send("File Eliminated correctly");
-};3
+    return res.status(200).send(newFileArray);
+};
+
+// downloads for files received by a link from another user
+export const downloadFromLink  = async (req: Request, res: Response)=> {
+
+};

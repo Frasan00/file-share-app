@@ -10,10 +10,14 @@ const userSchema = new mongoose.Schema({
         require: true
     },
     files:{
-        type: [{
+        type: [
+            {
             name: String,
-            size: Number
-        }],
+            size: Number,
+            date: String,
+            link: [String]
+        }
+    ],
         require: true,
         default: []
     },

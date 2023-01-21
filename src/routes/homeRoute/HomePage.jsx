@@ -8,7 +8,6 @@ import FileList from "./homeComponents/FileList";
 
 export const HomePage = ({userName, jwt, setIsLogged}) => {
 
-    const [searchedFile, setSearchedFile] = useState("");
     const [input, setInput] = useState(null);
     const [fileList, setFileList] = useState([]);
     
@@ -22,7 +21,7 @@ export const HomePage = ({userName, jwt, setIsLogged}) => {
 
     return (
         <div className="Homepage">
-            <NavBar userName={userName} handleLogOut={handleLogOut}/>
+            <NavBar userName={userName} handleLogOut={handleLogOut} fileList={fileList} setFileList={setFileList} jwt={jwt}/>
 
             <FileInput input={input} setInput={setInput} 
             fileList={fileList} setFileList={setFileList}

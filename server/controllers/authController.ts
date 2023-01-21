@@ -3,6 +3,7 @@ import User from "../database/User";
 import Session from "../database/Session";
 import { findUser } from "../utilities/findUser";
 import { tokenGenerator } from "../utilities/generateToke";
+import fs from "fs";
 import bcrypt from "bcrypt";
 
 export const register = async (req: Request, res: Response) => {
@@ -15,6 +16,15 @@ export const register = async (req: Request, res: Response) => {
         password: hashedPassword
     });
     const userSaving = await newUser.save();
+
+    // creating a folder for the user in uploads
+    fs.mkdir("./uploads/"+userName, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Folder created for '+userName);
+    }});
+
     console.log(userName+" registed");
     res.status(200).send(userName+" registed");
 };

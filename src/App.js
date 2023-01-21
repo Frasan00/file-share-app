@@ -8,6 +8,7 @@ import { LoginPage } from "./routes/authRoute/LoginPage";
 import { HomePage } from "./routes/homeRoute/HomePage";
 import { RegisterPage } from "./routes/authRoute/RegisterPage";
 
+
 function App() {
 
   // initialize from the browser local storage
