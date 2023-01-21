@@ -19,7 +19,7 @@ services:
     environment:
       - PORT=5000
       - JET_KEY=123123123
-      - MONGODB_URI=mongodb://mongodb:27017/chat-app
+      - MONGO_URI=mongodb://mongodb:27017/file-share
     depends_on:
       - mongodb
 
@@ -28,4 +28,4 @@ services:
     ports:
       - "27017:27017"
     environment:
-      - MONGO_URL=mongodb://mongodb:27017/chat-app
+      - MONGO_URL=mongodb://mongodb:27017/file-share
