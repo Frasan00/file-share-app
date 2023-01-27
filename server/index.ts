@@ -9,7 +9,7 @@ dotenv.config();
 // mongodb connection
 const mongo_url = process.env.MONGO_URI || "";
 mongoose.set('strictQuery', false)
-mongoose.connect(mongo_url)
+mongoose.connect("mongodb://127.0.0.1/file-share")
 .then(() => console.log("Connected to the Database"))
 .catch((err) => console.error(err));
 
