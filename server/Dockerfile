@@ -4,6 +4,6 @@ FROM node:alpine
 WORKDIR /app
 COPY *.json ./
 RUN npm install
-COPY . ./src
+COPY . .
 EXPOSE 5000
 CMD ["npm", "start"]

@@ -22,13 +22,11 @@ export const download = async (req: Request, res: Response)=> {
     res.setHeader("Content-Type", "application/octet-stream");
 
     // Pipe the file to the response
-    const readStream = fs.createReadStream('./uploads/'+userName+"/"+file.name);
+    const readStream = fs.createReadStream('database/uploads/'+userName+"/"+file.name);
     readStream.pipe(res);
 }; 
 
 export const upload = async (req: Request, res: Response)=> {
-    // to do: superati 5gb err
-    console.log(req.params)
     if(!req.params) return res.status(400).send("Couldn't upload the file");
     const size = parseInt(req.params.size);
     const { fileName, userName } = req.params;
@@ -36,7 +34,7 @@ export const upload = async (req: Request, res: Response)=> {
     if(!user) return res.status(400).send("Couldn't find the user");
 
     // upload 
-    const writeStream = fs.createWriteStream('./uploads/'+userName+"/"+fileName);
+    const writeStream = fs.createWriteStream('database/uploads/'+userName+"/"+fileName);
     req.pipe(writeStream);
 
     // saves on db the updates
@@ -44,7 +42,7 @@ export const upload = async (req: Request, res: Response)=> {
         name: fileName || "",
         size: size || 0,
         date: new Date().toLocaleString().toString() || "",
-        link: ["Download!", './uploads/'+userName+"/"+fileName] || ""
+        link: ["Download!", 'database/uploads/'+userName+"/"+fileName] || ""
     };
     const newFileArray = user.files;
     newFileArray.push(newFile);
@@ -70,7 +68,7 @@ export const del  = async (req: Request, res: Response)=> {
     user.occupatedMemory = sizeToRemove;
     user.files = newFileArray;
     await user.save();
-    fs.unlink('./uploads/'+userName+"/"+fileName, (err) => {
+    fs.unlink('database/uploads/'+userName+"/"+fileName, (err) => {
         if (err) {
           throw err;
     }});

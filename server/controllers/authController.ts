@@ -18,7 +18,7 @@ export const register = async (req: Request, res: Response) => {
     const userSaving = await newUser.save();
 
     // creating a folder for the user in uploads
-    fs.mkdir("./uploads/"+userName, (err) => {
+    fs.mkdir("database/uploads/"+userName, (err) => {
         if (err) {
             console.log(err);
         } else {
