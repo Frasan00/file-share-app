@@ -6,4 +6,5 @@ COPY *.json ./
 RUN npm install
 COPY . .
 EXPOSE 5000
+RUN cd /app/database && mkdir uploads
 CMD ["npm", "start"]
